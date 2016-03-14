@@ -70,7 +70,6 @@ def DownAndOut_put_option(S,K,r,T,sigma,B):
     H1KeqB=h1(S,B,r,T,sigma,B)
     H2=h2(S,K,r,T,sigma,B)
     H2KeqB=h2(S,B,r,T,sigma,B)
-    print "am here"
     
     return -S*( (norm.cdf(-D1)-norm.cdf(-D1KeqB)) +(B/S)**(1+2*r/sigma**2)*(norm.cdf(H1) -norm.cdf(H1KeqB)))+K*np.exp(-r*(T))*((norm.cdf(-D2)-norm.cdf(-D2KeqB)) + (B/S)**(-1+2*r/sigma**2)*(norm.cdf(H2)- norm.cdf(H2KeqB)))
 

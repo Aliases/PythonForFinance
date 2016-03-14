@@ -14,3 +14,8 @@ class FDCnDo(FDCnEu):
         # The values of i have to be adjusted to go from Sbarrier to Smax
         self.i_values=np.array(map(lambda x: int(x),self.boundary_conds/self.dS))
         
+    def _setup_boundary_conditions_(self):
+        FDCnEu._setup_boundary_conditions_(self)
+        # Since this is a down and out option the payoff on the lowest level of the grid should be zero corresponding to that boundary condition       
+        self.grid[0,:]=0.0
+        

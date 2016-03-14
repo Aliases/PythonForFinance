@@ -1,5 +1,6 @@
 import numpy as np
 
+from scipy.stats import norm
 
 def d1(S,K,r,T,sigma):
     return (np.log(S/K)+(T)*(r+sigma**2/2))/(sigma*np.sqrt(T))

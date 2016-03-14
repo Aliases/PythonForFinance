@@ -7,29 +7,26 @@ class FDExplicitEu(FiniteDifferences):
     def _setup_boundary_conditions_(self):
         if self.is_call:
             # recall self.boundary_conds contains all values of stocks possible
-            # the next command gives final call values and is this the boundary condition at final time
+            # the next command gives final call values and is the final condition
             self.grid[:,-1]=np.maximum(self.boundary_conds-self.K,0)
-            # the following gives the boundary condition at the top row that corresponds to maximum
-            # value the stock can take. The price here is taken to be just the discounted price at the final time
-            self.grid[-1,:-1]=(self.Smax-self.K)*np.exp(-self.r*self.dt*(self.N-self.j_values))
-            # the boundary condition at the bottom is autmoatically consisten with the value at the final time i.e. 0
-            # from the initialization of grid
-            
         else:
             # recall self.boundary_conds contains all values of stocks possible
             # the next command gives final call values and is this the boundary condition at final time
             self.grid[:,-1]=np.maximum(self.K-self.boundary_conds,0)
-            # the following gives the boundary condition at the bottom row that corresponds to minimum value the stock can take
-           
-            # *********** However it still uses Smax ********??????????
-            #self.grid[0,:-1]=(self.K-self.Smax)*np.exp(-self.r*self.dt*(self.N-self.j_values))
-            # I think thats a typo and it should be
-            self.grid[0,:-1]=(self.K)*np.exp(-self.r*self.dt*(self.N-self.j_values))
-            # to be consisten with final condition and Smin=0
-            # The price has been discounted obviously
             
-            # The top boundary is already 0 by the grid initialization and is consistent with the final condition at the
-            # top boundary
+        
+        # the original code in the book uses
+        #self.grid[-1,:-1]=(self.K-self.Smax)*np.exp(-self.r*self.dt*(self.N-self.j_values))
+        # for upper boundary condition and maintaines zero for lower for call
+        # and 
+        #self.grid[0,:-1]=(self.K-self.Smax)*np.exp(-self.r*self.dt*(self.N-self.j_values))
+        # for the lower boundary condition and maintains zero for the upper for put
+        # I don't think the latter is correct
+        
+        
+        # the following gives the boundary condition at the top and bottom row as the final values discounted
+        self.grid[-1,:-1]=(self.grid[-1,-1] )*np.exp(-self.r*self.dt*(self.N-self.j_values))
+        self.grid[0,:-1]=(self.grid[0,-1])*np.exp(-self.r*self.dt*(self.N-self.j_values))
             
     def _setup_coefficients_(self):
         self.a=0.5*self.dt*((self.sigma**2) * (self.i_values**2)-self.r*self.i_values)

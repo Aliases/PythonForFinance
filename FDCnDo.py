@@ -25,12 +25,23 @@ def main():
     print "Demo with S0=%f,K=%f,r=%f,T=%f,sigma=%f,Sbarrier=%f,Smax=%f,M=%i,N=%i" % (S0,K,r,T,sigma,Sbarrier,Smax,M,N)
     call_option=FDCnDo(S0,K,r,T,sigma,Sbarrier,Smax,M,N)
     put_option=FDCnDo(S0,K,r,T,sigma,Sbarrier,Smax,M,N,False)
-    print "Price of call option is %f" % call_option.price()
-    print "Price of put option is %f" % put_option.price()
+
     
+    print "*"*10, " results from analytical expressions ", "*"*10
     import AnalyticalFormulae
     print "Price from analytical expression for call is %f" % AnalyticalFormulae.DownAndOut_call_option(S0,K,r,T,sigma,Sbarrier)
     print "Price from analytical expression for put is %f" % AnalyticalFormulae.DownAndOut_put_option(S0,K,r,T,sigma,Sbarrier)
+
+    print "*"*10, " results from numerical PDE ", "*"*10
+    print "Price of call option is %f" % call_option.price()
+    print "Price of put option is %f" % put_option.price()
+    
+    
+    import MonteCarloMethods
+    print "*"*10, " results from Monte Carlo ", "*"*10
+    print "Price from analytical expression for call is %f +- %f" % MonteCarloMethods.Barrier_Out_Monte_Carlo(S0,K,r,T,sigma,Sbarrier,down_and_out=True,is_call=True,ntrials=50000)
+    print "Price from analytical expression for put is %f +- %f" % MonteCarloMethods.Barrier_Out_Monte_Carlo(S0,K,r,T,sigma,Sbarrier,down_and_out=True,is_call=False,ntrials=50000)
+
 
 if __name__ == "__main__":
     main()
